@@ -1,0 +1,5 @@
+#MySQL Sttings
+mysql_root_password: "rootadmin123"
+mysql_db: "web"
+mysql_user: "virt"
+mysql_password: "amdin123"
