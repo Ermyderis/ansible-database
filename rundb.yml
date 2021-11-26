@@ -1,5 +1,4 @@
---
-
+---
 - name: Install MYSQL and start service
   hosts: database
   vars_files:
@@ -56,3 +55,17 @@
         login_user: root
         login_password: "{{ mysql_root_password }}"
       tags: [ mysql ]
+
+    - name: MySQL table
+      copy:
+        src: dump.sql
+        dest: /tmp/dump.sql
+
+    - name: Inert table MySQL
+      mysql_db: 
+        name: "{{ mysql_db }}" 
+        state: import 
+        target: /tmp/dump.sql
+        login_user: root
+        login_password: "{{ mysql_root_password }}"
+

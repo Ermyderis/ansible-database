@@ -1,5 +1,6 @@
 #MySQL Sttings
 mysql_root_password: "rootadmin123"
-mysql_db: "web"
-mysql_user: "virt"
-mysql_password: "amdin123"
+mysql_db: "wordpress"
+mysql_user: "call_admin"
+mysql_password: "call_password"
+
