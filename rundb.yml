@@ -14,12 +14,18 @@
          name: python-mysqldb
          state: latest
 
+    - name: Intsall python-mysqldb
+      apt:
+         name: python3-pymysql
+         state: latest
+
   # MySQL Configuration
     - name: Set the root password
       mysql_user:
         name: root
         password: "{{ mysql_root_password }}"
       tags: [ mysql, mysql-root ]
+    
 
     - name: Remove all anonymous user accounts
       mysql_user:
@@ -38,14 +44,6 @@
         login_password: "{{ mysql_root_password }}"
       tags: [ mysql ]
 
-    - name: Creates database for WordPress
-      mysql_db:
-        name: "{{ mysql_db }}"
-        state: present
-        login_user: root
-        login_password: "{{ mysql_root_password }}"
-      tags: [ mysql ]
-
     - name: Create MySQL user for WordPress
       mysql_user:
         name: "{{ mysql_user }}"
@@ -58,14 +56,15 @@
 
     - name: MySQL table
       copy:
-        src: dump.sql
-        dest: /tmp/dump.sql
+        src: wordpress_latest.db
+        dest: /tmp/wordpress_latest.db
 
     - name: Inert table MySQL
       mysql_db: 
         name: "{{ mysql_db }}" 
         state: import 
-        target: /tmp/dump.sql
+        target: /tmp/wordpress_latest.db
         login_user: root
         login_password: "{{ mysql_root_password }}"
+
 
