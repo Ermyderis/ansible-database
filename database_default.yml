@@ -3,4 +3,6 @@ mysql_root_password: "rootadmin123"
 mysql_db: "wordpress"
 mysql_user: "call_admin"
 mysql_password: "call_password"
+remote_host_ip: "%"
+
 

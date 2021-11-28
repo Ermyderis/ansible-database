@@ -19,6 +19,20 @@
          name: python3-pymysql
          state: latest
 
+    - name: replace line
+      lineinfile:
+        path:  /etc/mysql/mysql.conf.d/mysqld.cnf
+        regexp: '127.0.0.1'
+        line: 'bind-address            = 0.0.0.0'
+        backrefs: yes
+
+    - name: Run the command restart mysql
+      command: sudo systemctl restart mysql
+
+    - name: Run the command for firewall
+      command: sudo iptables -A INPUT -p tcp --dport 3306 -j ACCEPT
+
+
   # MySQL Configuration
     - name: Set the root password
       mysql_user:
@@ -44,11 +58,20 @@
         login_password: "{{ mysql_root_password }}"
       tags: [ mysql ]
 
+    - name: Creates database for WordPress
+      mysql_db:
+        name: "{{ mysql_user }}"
+        state: present
+        login_user: root
+        login_password: "{{ mysql_root_password }}"
+      tags: [ mysql ]
+
     - name: Create MySQL user for WordPress
       mysql_user:
         name: "{{ mysql_user }}"
         password: "{{ mysql_password }}"
-        priv: "{{ mysql_db }}.*:ALL"
+        priv: "{{ mysql_db }}.*:ALL,GRANT"
+        host: "{{ remote_host_ip }}"
         state: present
         login_user: root
         login_password: "{{ mysql_root_password }}"
@@ -66,5 +89,4 @@
         target: /tmp/wordpress_latest.db
         login_user: root
         login_password: "{{ mysql_root_password }}"
-
 
